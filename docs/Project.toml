@@ -1,0 +1,8 @@
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+DocumenterTools = "35a29f4d-8980-5a13-9543-d66fff28ecb8"
+OpticSimVis = "7d2b94d0-197c-11ec-1fcd-45fcfac2577b"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+
+[compat]
+Documenter = "< 0.27"

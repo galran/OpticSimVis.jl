@@ -25,7 +25,7 @@ jobs:
           xvfb-run julia --project=docs/ -e '
             using Pkg
             Pkg.develop(PackageSpec(path=pwd()))
-            add https://github.com/galran/Glimmer.jl
+            Pkg.add("https://github.com/galran/Glimmer.jl")
             Pkg.instantiate()
             Pkg.build()
           '        

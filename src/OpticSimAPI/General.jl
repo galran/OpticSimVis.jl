@@ -74,6 +74,17 @@ indexedcolor2(i::Int) = ColorSchemes.hsv[1.0 - rem(i / (2.1 * π), 1.0)] .* 0.5
 # end
 
 
+
+
+"""
+    draw!(scene::Makie.LScene, csg::Union{CSGTree,CSGGenerator}; numdivisions::Int = 20, kwargs...)
+
+Convert a CSG object ([`CSGTree`](@ref) or [`CSGGenerator`](@ref)) to a mesh using [`makemesh`](@ref) with resolution set by `numdivisions` and draw the resulting [`TriangleMesh`](@ref).
+"""
+draw!(scene::Scene, csg::CSGTree{T}; numdivisions::Int = 30, kwargs...) where {T<:Real} = draw!(scene, makemesh(csg, numdivisions); kwargs...)
+draw!(scene::Scene, csg::CSGGenerator{T}; kwargs...) where {T<:Real} = draw!(scene, csg(); kwargs...)
+
+
 #-----------------------------------------------------------------------------------------------
 #   MESH from FILE
 #-----------------------------------------------------------------------------------------------
@@ -171,7 +182,7 @@ end
 # LensAssembly
 #-----------------------------------------------------------------------------------------------
 function draw!(scene::Scene, ass::LensAssembly{T}; kwargs...) where {T<:Real}
-    @info "Draw LensAssembly"
+    # @info "Draw LensAssembly"
     for (i, e) in enumerate(elements(ass))
         draw!(scene, e; kwargs..., color = indexedcolor2(i))
     end
@@ -182,10 +193,12 @@ end
 #-----------------------------------------------------------------------------------------------
 
 function draw!(scene::Scene, sys::CSGOpticalSystem{T}; kwargs...) where {T<:Real}
-    @info "Draw CSGOpticalSystem"
+    # @info "Draw CSGOpticalSystem"
     draw!(scene, sys.assembly; kwargs...)
     draw!(scene, sys.detector; kwargs...)
 end
+
+draw!(scene::Scene, sys::AxisymmetricOpticalSystem{T}; kwargs...) where {T<:Real} = draw!(scene, sys.system; kwargs...)
 
 
 #-----------------------------------------------------------------------------------------------
@@ -214,7 +227,7 @@ function drawtracerays!(
 
     raylines = Vector{LensTrace{T,3}}(undef, 0)
 
-    @info "drawtracerays!"
+    # @info "drawtracerays!"
     drawgen && draw!(scene, raygenerator, norays = true; kwargs...)
     drawsys && draw!(scene, system; kwargs...)
 
@@ -244,7 +257,7 @@ function drawtracerays!(
         end
     end
     verbose && print("\r")
-    @info "Ray Lines", length(raylines)
+    # @info "Ray Lines", length(raylines)
 
     verbose && println("Drawing Rays...")
     draw!(scene, raylines, colorbysourcenum = colorbysourcenum, colorbynhits = colorbynhits; kwargs...)
@@ -252,7 +265,7 @@ end
 
 
 function draw!(scene::Scene, traces::AbstractVector{LensTrace{T,N}}; colorbysourcenum::Bool = false, colorbynhits::Bool = false, kwargs...) where {T<:Real,N}
-    @info "Draw Vector of LensTrace"
+    # @info "Draw Vector of LensTrace"
     traces_by_colors = Dict()
     for trace in traces
         # draw!(scene, t; kwargs...)

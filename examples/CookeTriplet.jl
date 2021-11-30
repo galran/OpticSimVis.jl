@@ -50,7 +50,7 @@ ui = VContainer(
                 content=VContainer(
                     Slider(
                         text="Radius 1",
-                        trailing_text="[\$()]",
+                        trailingText="[\$()]",
                         min=15,
                         max=40,
                         value=26,
@@ -69,7 +69,7 @@ ui = VContainer(
                 content=VContainer(
                     Slider(
                         text="Radius 2",
-                        trailing_text="[\$()]",
+                        trailingText="[\$()]",
                         min=15,
                         max=100,
                         value=26,

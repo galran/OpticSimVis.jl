@@ -18,7 +18,7 @@ scene = Scene(openWindow = false)
 set_Z_up!(scene)
 grid!(scene, false)
 axes!(scene, false)
-cameraTransform!(scene, lookAt(SVector(1.0, 1.0, -1.0), zero3()))
+cameraTransform!(scene, lookAt(SVector(1.0, 1.0, -1.0), SVector(0.0, 0.0, 0.0)))
 cameraPlanes!(scene, 0.1, 1000.0)
 
 #---------------------------------------------------------------
@@ -81,7 +81,7 @@ ui = VContainer(
         content = VContainer(
             Slider(
                 text="O: Rect Uniform Samples",
-                trailing_text="[\$()]",
+                trailingText="[\$()]",
                 min=1,
                 max=1000,
                 value=10,
@@ -89,7 +89,7 @@ ui = VContainer(
             ),  
             Slider(
                 text="O: Rect Grid Resolution",
-                trailing_text="[\$()]",
+                trailingText="[\$()]",
                 min=2,
                 max=50,
                 value=5,
@@ -97,7 +97,7 @@ ui = VContainer(
             ),  
             Slider(
                 text="O: Hexapolar Rings",
-                trailing_text="[\$()]",
+                trailingText="[\$()]",
                 min=1,
                 max=20,
                 value=2,

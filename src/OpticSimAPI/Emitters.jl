@@ -67,7 +67,7 @@ end
 #-------------------------------------
 # draw RectGrid and RectUniform origins
 #-------------------------------------
-function draw!(scene::Scene, o::Union{Origins.RectGrid, Origins.RectUniform}; parent_so::AbstractSceneObject = root(scene), kwargs...) where {T<:Real}
+function draw!(scene::Scene, o::Union{Origins.RectGrid, Origins.RectUniform, Origins.RectJitterGrid}; parent_so::AbstractSceneObject = root(scene), kwargs...) where {T<:Real}
     transform = local_tr(parent_so)
     dir = forward(transform)
     uv = SVector{3}(right(transform))
@@ -144,7 +144,7 @@ function draw!(scene::Scene, s::Sources.Source{T}; parent_so::AbstractSceneObjec
         segments_mat = OpticSimVis.Material(color=RGBA(0.9, 0.9, 0.1, 0.5))
         segments = OpticSimVis.LineSegments(
             points=points, 
-            tr=Transform(Vec3(0.0, 0.0, 0.0)), 
+            tr=transform(Transform(Vec3(0.0, 0.0, 0.0))), 
             material=segments_mat, 
             name="Debug Rays")
         OpticSimVis.parent!(segments, base_so)

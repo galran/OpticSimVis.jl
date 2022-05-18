@@ -68,7 +68,7 @@ end
 # draw RectGrid and RectUniform origins
 #-------------------------------------
 function draw!(scene::Scene, o::Union{Origins.RectGrid, Origins.RectUniform, Origins.RectJitterGrid}; parent_so::AbstractSceneObject = root(scene), kwargs...) where {T<:Real}
-    transform = local_tr(parent_so)
+    transform = Transform() # toTransform(local_tr(parent_so))
     dir = forward(transform)
     uv = SVector{3}(right(transform))
     vv = SVector{3}(up(transform))
@@ -88,7 +88,7 @@ end
 # draw hexapolar origin
 #-------------------------------------
 function draw!(scene::Scene, o::Origins.Hexapolar{T}; parent_so::AbstractSceneObject = root(scene), kwargs...) where {T<:Real}
-    transform = local_tr(parent_so)
+    transform = Transform() # local_tr(parent_so)
     dir = forward(transform)
     uv = SVector{3}(right(transform))
     vv = SVector{3}(up(transform))
@@ -111,7 +111,7 @@ function draw!(scene::Scene, s::Sources.Source{T}; parent_so::AbstractSceneObjec
 
     name = "Source-$(UUIDs.uuid1())"
     t = s.transform;        
-    root_so = EmptySceneObject(tr=t, name=name)
+    root_so = EmptySceneObject(tr=transform(t), name=name)
     OpticSimVis.parent!(root_so , parent_so)
     
     obj = draw!(scene, s.origins;  color=RGBA(1.0, 1.0, 0.0, 0.5), parent_so=root_so, debug=debug, kwargs...)
@@ -123,6 +123,7 @@ function draw!(scene::Scene, s::Sources.Source{T}; parent_so::AbstractSceneObjec
         for (index, optical_ray) in enumerate(s)
             ray = OpticSim.ray(optical_ray)
             ray = parent_transform * ray
+            # @info ray.origin, ray.direction
             m[index, 1:7] = [ray.origin... ray.direction... OpticSim.power(optical_ray)]
         end
         
@@ -144,7 +145,7 @@ function draw!(scene::Scene, s::Sources.Source{T}; parent_so::AbstractSceneObjec
         segments_mat = OpticSimVis.Material(color=RGBA(0.9, 0.9, 0.1, 0.5))
         segments = OpticSimVis.LineSegments(
             points=points, 
-            tr=transform(Transform(Vec3(0.0, 0.0, 0.0))), 
+            tr=transform(inv(parent_transform * t)), #transform(Transform(Vec3(0.0, 0.0, 0.0))), 
             material=segments_mat, 
             name="Debug Rays")
         OpticSimVis.parent!(segments, base_so)
@@ -177,9 +178,9 @@ end
 #-------------------------------------
 function draw!(scene::Scene, s::Sources.CompositeSource{T}; parent_so::AbstractSceneObject = root(scene), kwargs...) where {T<:Real}
 
-    name = "Composite Source" # -$(UUIDs.uuid1())"
+    name = "Composite Source-$(UUIDs.uuid1())"
     t = s.transform;        
-    root_so = EmptySceneObject(name=name)
+    root_so = EmptySceneObject(tr=transform(t), name=name)
     OpticSimVis.parent!(root_so , parent_so)
 
     # axes = OpticSimVis.Axes(

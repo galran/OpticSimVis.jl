@@ -338,7 +338,7 @@ function draw!(
         segments = OpticSimVis.LineSegments(
             points=points, 
             material=segments_mat, 
-            name="Traced $(color)")
+            name="Traced-$(UUIDs.uuid1())")
         OpticSimVis.parent!(segments, parent_so)        
 
     end    

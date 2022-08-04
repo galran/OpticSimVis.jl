@@ -1,7 +1,7 @@
 name = "OpticSimVis"
 uuid = "7d2b94d0-197c-11ec-1fcd-45fcfac2577b"
 authors = ["Ran Gal <rgal@microsoft.com>"]
-version = "0.2.0"
+version = "0.2.1"
 
 [deps]
 ColorSchemes = "35d6a980-a343-548e-a6ea-1d62b119f2f4"
